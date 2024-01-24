@@ -2,7 +2,7 @@
 
 namespace T072_RepositoryFlow.Repositories
 {
-	public class UsersRepository(IConfiguration config)
+	public class UsersRepository(IConfiguration config) : IUsersRepository
 	{
 		private readonly DataContextEF _ef = new(config);
 

@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using T072_RepositoryFlow.Data;
 using T072_RepositoryFlow.Dtos;
 using T072_RepositoryFlow.Models;
+using T072_RepositoryFlow.Repositories;
 
 namespace T072_RepositoryFlow.Controllers
 {
-
 	[ApiController]
 	[Route("[controller]")]
-	public class UsersControllerEF(IConfiguration config) : ControllerBase
+	public class UsersController(IConfiguration config, IUsersRepository usersRepository) : ControllerBase
 	{
 		private readonly DataContextEF _ef = new(config);
+		private readonly IUsersRepository _usersRepository = usersRepository;
 		private readonly Mapper _mapper = new(new MapperConfiguration(cfg =>
 		{
 			cfg.CreateMap<UserToAddDto, UserModel>();
@@ -23,8 +24,8 @@ namespace T072_RepositoryFlow.Controllers
 		{
 			UserModel userToAdd = _mapper.Map<UserModel>(user);
 
-			_ef.Add(userToAdd);
-			if (_ef.SaveChanges() > 0)
+			_usersRepository.AddEntity(userToAdd);
+			if (_usersRepository.SaveChanges())
 			{
 				return Ok();
 			}
@@ -62,7 +63,7 @@ namespace T072_RepositoryFlow.Controllers
 			userToEdit.Gender = user.Gender;
 			userToEdit.Active = user.Active;
 
-			if (_ef.SaveChanges() > 0)
+			if (_usersRepository.SaveChanges())
 			{
 				return Ok();
 			}
@@ -78,8 +79,8 @@ namespace T072_RepositoryFlow.Controllers
 				.Where(u => u.UserId == userId)
 				.FirstOrDefault() ?? throw new Exception("Failed to Get User during Delete action.");
 
-			_ef.Users.Remove(userToDelete);
-			if (_ef.SaveChanges() > 0)
+			_usersRepository.RemoveEntity(userToDelete);
+			if (_usersRepository.SaveChanges())
 			{
 				return Ok();
 			}
