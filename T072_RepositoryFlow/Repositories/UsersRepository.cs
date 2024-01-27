@@ -1,4 +1,5 @@
 ﻿using T072_RepositoryFlow.Data;
+using T072_RepositoryFlow.Models;
 
 namespace T072_RepositoryFlow.Repositories
 {
@@ -25,6 +26,32 @@ namespace T072_RepositoryFlow.Repositories
 			{
 				_ef.Add(entityToRemove);
 			}
+		}
+
+		public IEnumerable<UserModel> GetUsers()
+		{
+			return _ef.Users.ToList();
+		}
+
+		public UserModel GetUser(int userId)
+		{
+			return _ef.Users
+				.Where(u => u.UserId == userId)
+				.FirstOrDefault() ?? throw new Exception($"Failed to Get User with ID: {userId}.");
+		}
+
+		public UserSalaryModel GetUserSalary(int userId)
+		{
+			return _ef.UserSalary
+				.Where(u => u.UserId == userId)
+				.FirstOrDefault() ?? throw new Exception($"Failed to Get User with ID: {userId}.");
+		}
+
+		public UserJobInfoModel GetUserJobInfo(int userId)
+		{
+			return _ef.UserJobInfo
+				.Where(u => u.UserId == userId)
+				.FirstOrDefault() ?? throw new Exception($"Failed to Get User with ID: {userId}.");
 		}
 	}
 }
