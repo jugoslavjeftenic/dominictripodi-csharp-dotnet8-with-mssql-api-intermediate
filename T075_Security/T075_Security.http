@@ -1,0 +1,6 @@
+@T075_Security_HostAddress = http://localhost:5130
+
+GET {{T075_Security_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
