@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using T072_RepositoryFlow.Data;
 using T072_RepositoryFlow.Dtos;
 using T072_RepositoryFlow.Models;
 using T072_RepositoryFlow.Repositories;
