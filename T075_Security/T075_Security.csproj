@@ -8,12 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.28" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Data\" />
 		<Folder Include="Repositories\" />
 	</ItemGroup>
 
