@@ -37,15 +37,15 @@ namespace T075_Security.Controllers
 					byte[] passwordHash = GetPasswordHash(userForRegistration.Password, passwordSalt);
 
 					string sqlAddAuth = @$"
-						INSERT INTO TutorialAppSchema.Auth (
-							[Email], 
-							[PasswordHash], 
-							[PasswordSalt]
-						) VALUES (
-							'{userForRegistration.Email}', 
-							@PasswordHash, 
-							@PasswordSalt
-						)";
+					INSERT INTO TutorialAppSchema.Auth (
+						[Email], 
+						[PasswordHash], 
+						[PasswordSalt]
+					) VALUES (
+						'{userForRegistration.Email}', 
+						@PasswordHash, 
+						@PasswordSalt
+					)";
 
 					List<SqlParameter> sqlParameters = [];
 
@@ -64,7 +64,27 @@ namespace T075_Security.Controllers
 
 					if (_dapper.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters))
 					{
-						return Ok();
+						string sqlAddUser = @$"
+						INSERT INTO [TutorialAppSchema].[Users] (
+							[FirstName],
+							[LastName],
+							[Email],
+							[Gender],
+							[Active]
+						) VALUES (
+							'{userForRegistration.FirstName}',
+							'{userForRegistration.LastName}',
+							'{userForRegistration.Email}',
+							'{userForRegistration.Gender}',
+							'1'
+						)";
+
+						if (_dapper.ExecuteSql(sqlAddUser))
+						{
+							return Ok();
+						}
+
+						throw new Exception("Failed to add user.");
 					}
 
 					throw new Exception("Failed to register user.");
@@ -80,12 +100,12 @@ namespace T075_Security.Controllers
 		public IActionResult Login(UserForLoginDto userForLogin)
 		{
 			string sqlForHashAndSalt = @$"
-				SELECT 
-					[PasswordHash], 
-					[PasswordSalt] 
-				FROM TutorialAppSchema.Auth 
-				WHERE Email = '{userForLogin.Email}'
-				";
+			SELECT 
+				[PasswordHash], 
+				[PasswordSalt] 
+			FROM TutorialAppSchema.Auth 
+			WHERE Email = '{userForLogin.Email}'
+			";
 
 			UserForLoginConfirmationDto userForLoginConfirmation =
 				_dapper.LoadDataSingle<UserForLoginConfirmationDto>(sqlForHashAndSalt);
