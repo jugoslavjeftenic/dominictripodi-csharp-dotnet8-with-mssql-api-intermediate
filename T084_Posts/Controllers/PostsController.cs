@@ -115,6 +115,25 @@ namespace T084_Posts.Controllers
 			return _dapper.LoadData<PostModel>(sql);
 		}
 
+		// Read - bySearch
+		[HttpGet("GetPostsBySearch/{searchParam}")]
+		public IEnumerable<PostModel> GetPostsBySearch(string searchParam)
+		{
+			string sql = @$"
+			SELECT
+				[PostId],
+				[UserId],
+				[PostTitle],
+				[PostContent],
+				[PostCreated],
+				[PostUpdated]
+			FROM [TutorialAppSchema].[Posts]
+			WHERE [PostTitle] LIKE '%{searchParam}%' OR [PostContent] LIKE '%{searchParam}%'
+			";
+
+			return _dapper.LoadData<PostModel>(sql);
+		}
+
 		// Update
 		[HttpPut("EditPost")]
 		public IActionResult EditPost(PostToEditDto post)
